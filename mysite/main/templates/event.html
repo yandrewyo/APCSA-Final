@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+<link href="{% static 'css/event.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+{% block content %}
+
+    <link href="{% static 'css/event.css' %}" rel="stylesheet">
+    <nav>
+        <a><button onclick="(() => window.history.back())()">Return to Swimmer Page</button></a>
+    </nav>
+</header>
+<main>
+    <h2 class="name">{{event}}</h2>
+
+    <h3>Best Time</h3>
+    
+    <table>
+        <thead>
+            <tr><th>Event</th><th>Time</th><th>Points</th><th>Standard</th><th>Age</th><th>Date</th><th>Meet</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i, j in pbs.items %}
+                    {%if i in event %}
+                        <td>{{event}} SCY</td>
+                        {%if j.LCM.items|length == 0 %}
+                            <td>Not swam</td>
+                        {%endif%}
+                        {% for key, val in j.SCY.items %}
+                            <td>{{val|cut:'"'}}</td>
+                        {%endfor%}
+                    {%endif%}
+                {%endfor%}
+            </tr>
+            <tr>
+                {% for i, j in pbs.items %}
+                    {%if i in event %}
+                        <td>{{event}} LCM</td>
+                        {%if j.LCM.items|length == 0 %}
+                            <td>Not swam</td>
+                        {%endif%}
+                        {% for key, val in j.LCM.items %}
+                            <td>{{val|cut:'"'}}</td>
+                        {%endfor%}
+                    {%endif%}
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Best Performance</h3>
+    <table>
+        <thead>
+            <tr><th>Event</th><th>Time</th><th>Points</th><th>Standard</th><th>Age</th><th>Date</th><th>Meet</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i, j in best_performances.items %}
+                    {%if i in event %}
+                        <td>{{event}} SCY</td>
+                        {%if j.SCY.items|length == 0 %}
+                            <td>Not swam</td>
+                        {%endif%}
+                        {% for key, val in j.SCY.items %}
+                            <td>{{val|cut:'"'}}</td>
+                        {%endfor%}
+                    {%endif%}
+                {%endfor%}
+            </tr>
+            <tr>
+                {% for i, j in best_performances.items %}
+                    {%if i in event %}
+                        <td>{{event}} LCM</td>
+                        {%if j.LCM.items|length == 0 %}
+                            <td>Not swam</td>
+                        {%endif%}
+                        {% for key, val in j.LCM.items %}
+                            <td>{{val|cut:'"'}}</td>
+                        {%endfor%}
+                    {%endif%}
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- <h3>Goal</h3>
+    <form method="post">
+        {%csrf_token%}
+        Goal:
+        <input name="goal">
+        <button name="setGoal">Set Goal</button>
+    </form> -->
+
+
+    <h4>{{event}} SCY</h4>
+
+    <table>
+        <thead>
+            <tr><th>Time</th><th>Age</th><th>Power Points</th><th>Standard</th><th>Meet</th><th>Club</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for key, val in form.events.items %}
+                {% if event in key and "SCY" in key %}
+                    {% for i in val %}
+                        <tr>
+                            {%for k, v in i.items%}
+                                {% if k != "Improvement" %}
+                                    <td>{{v|cut:'"'}}</td>
+                                {%endif%}
+                            {%endfor%}
+                        </tr>
+                    {%endfor%}
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <h4>{{event}} LCM</h4>
+
+    <table>
+        <thead>
+            <tr><th>Time</th><th>Age</th><th>Power Points</th><th>Standard</th><th>Meet</th><th>Club</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for key, val in form.events.items %}
+                {% if event in key and "LCM" in key %}
+                    {% for i in val %}
+                        <tr>
+                            {%for k, v in i.items%}
+                                {% if k != "Improvement" %}
+                                    <td>{{v|cut:'"'}}</td>
+                                {%endif%}
+                            {%endfor%}
+                        </tr>
+                    {%endfor%}
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

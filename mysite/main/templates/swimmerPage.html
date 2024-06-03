@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link href="{% static 'css/swimmerPage.css' %}" rel="stylesheet">
+
+    <nav>
+        <a href="{% url 'index' %}"><button>Return to Search Page</button></a>
+        <form method="post" action="{%url 'eventPage'%}">
+            {%csrf_token%}
+            <input type="hidden" name="name" value="{{name}}">
+            <ul>
+                {% for i in pbs %}
+                    <button name="events" value="{{i}}">{{i}}</button>
+                {%endfor%}
+            </ul>
+        </form>
+    </nav>
+</header>
+<main>
+    <h1 class="name">{{name.title}}</h1>
+    <!-- {{meets}} -->
+    {{meets.items.Events}}
+    {% for key, val in meets.items %}
+        <table>
+            <thead>
+                <tr class="row-1"><th>{{key}}</th></tr>
+                <tr class="row-2">
+                    {% for k, v in val.items %}
+                        {% if k != "Events" %}
+                            <th>{{k}}: {{v}}</th>
+                        {%endif%}
+                    <!-- <th>Date: {{val.Date}}</th><th>Age: {{val.Age}}</th><th>Club: {{val.Club}}</th> -->
+                    {%endfor%}
+                </tr>
+                <tr class="row-3">
+                    <th>Event</th><th>Time</th><th>Power Points</th><th>Standard</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for race in val.Events %}
+                    <tr class="races">
+                        <td>{{race.Name}}</td>
+                        {% for k, v in race.items %}
+                            {% if k != "Name" and k != "Improvement" %}
+                                {% if k == "Time" and race.Improvement != "" %}
+                                    {% if race.Improvement|slice:":1" != "-" %}
+                                        <td>{{v}} (+{{race.Improvement}})</td>
+                                    {%else%}
+                                        <td>{{v}} ({{race.Improvement}})</td>
+                                    {%endif%}
+                                {%else%}
+                                    <td>{{v|cut:'"'}}</td>
+                                {%endif%}
+                            {%endif%}
+                        {%endfor%}
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    {%endfor%}
+</main>
+{% endblock %}

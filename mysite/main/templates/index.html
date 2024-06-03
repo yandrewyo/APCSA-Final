@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+</header>
+<form method="post" action="{%url 'swimmerPage'%}">
+    {%csrf_token%}
+    <tr>Name {{form.name}}</tr><br>
+    <tr>Team Name {{form.team}}</tr><br>
+    <tr><button name="search">Search</button></tr>
+</form>
+
+<h2>Saved Profiles</h2>
+<form method="post" action="{%url 'swimmerPage'%}">
+    {%csrf_token%}
+    {% for i in info %}
+        <button name="load" value="{{i}}">{{i.name}}</button>
+    {%endfor%}
+</form>
+
+{% endblock %}
